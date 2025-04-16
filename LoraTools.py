@@ -137,6 +137,10 @@ class ImageCropper:
             self.current_index += 1
             self.load_image()
 
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog
+
 class CropImagePage(QWidget):
     def __init__(self):
         super().__init__()
@@ -145,30 +149,61 @@ class CropImagePage(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
+        # Key Mappings Legend
+        legend = """Key Mappings:
+c - Crop
+f - Flip & Crop
+t - Save Full Image
+a - Delete Image
+j - Skip Image
+x - Previous Image
+v - Next Image
+q - Quit"""
+        
+        # Add a simple legend with improved readability
+        self.legend_label = QLabel(legend)
+        self.legend_label.setWordWrap(True)
+        self.legend_label.setAlignment(Qt.AlignTop)
+        
+        # Increase font size and bold for better visibility
+        font = QFont("Arial", 10, QFont.Bold)
+        self.legend_label.setFont(font)
+        self.legend_label.setAlignment(Qt.AlignLeft)
+
+        # Input folder section
         self.input_label = QLabel("Input Directory:")
         self.input_dir = QLineEdit()
         self.input_button = QPushButton("Select Input Folder")
         self.input_button.clicked.connect(self.select_input_folder)
 
+        # Output folder section
         self.output_label = QLabel("Output Directory:")
         self.output_dir = QLineEdit()
         self.output_button = QPushButton("Select Output Folder")
         self.output_button.clicked.connect(self.select_output_folder)
 
+        # Start cropping button
         self.start_button = QPushButton("Start Cropping")
         self.start_button.clicked.connect(self.start_cropping)
 
+        # Adding widgets to layout with spacing
+        layout.addWidget(self.legend_label)  # Add legend at the top
+        layout.addSpacing(10)  # Space between legend and input section
         layout.addWidget(self.input_label)
         layout.addWidget(self.input_dir)
         layout.addWidget(self.input_button)
+        layout.addSpacing(10)  # Space between input and output sections
         layout.addWidget(self.output_label)
         layout.addWidget(self.output_dir)
         layout.addWidget(self.output_button)
+        layout.addSpacing(20)  # Space before the start button
         layout.addWidget(self.start_button)
 
+        # Set fixed height for buttons
         for button in [self.input_button, self.output_button, self.start_button]:
-            button.setFixedHeight(60)  # Set button height to 60px
+            button.setFixedHeight(50)
 
+        # Set the layout for the QWidget
         self.setLayout(layout)
 
     def select_input_folder(self):
